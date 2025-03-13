@@ -6,7 +6,7 @@ function App() {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
 
-  // Cargar código guardado al iniciar la aplicación
+  // Load saved code on startup
   useEffect(() => {
     async function loadSavedCode() {
       try {
@@ -22,7 +22,7 @@ function App() {
     loadSavedCode();
   }, []);
 
-  // Guardar código cada vez que el usuario escribe
+  // Save code on change
   useEffect(() => {
     const timeout = setTimeout(() => {
       saveCode(code);
@@ -32,7 +32,6 @@ function App() {
     return () => clearTimeout(timeout);
   }, [code]);
 
-  // Ejecutar código con Tauri
   const runCode = async () => {
     try {
       const result = await invoke<string>("run_js_code", { code });
@@ -42,7 +41,6 @@ function App() {
     }
   };
 
-  // Guardar código en el archivo local
   const saveCode = async (code: string) => {
     try {
       console.log("💾 Guardando código:", code);

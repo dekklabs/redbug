@@ -5,23 +5,20 @@ use std::fs;
 use std::process::{Command, Stdio};
 use std::env;
 use std::path::PathBuf;
-use dirs; // Importar `dirs` para obtener la carpeta de Documentos
+use dirs; 
 
-/// Obtener la ruta donde se almacenará el código del playground en `~/Documents/redbug/playground_code.txt`
 fn get_storage_path() -> PathBuf {
-    let home_dir = dirs::document_dir().unwrap(); // Obtener ~/Documents
+    let home_dir = dirs::document_dir().unwrap(); 
     let path = home_dir.join("redbug/playground_code.txt");
 
-    println!("Ruta de almacenamiento: {:?}", path); // <-- DEBUG
+    println!("Ruta de almacenamiento: {:?}", path);
     path
 }
 
-/// Guardar el código en un archivo local
 #[command]
 fn save_code(code: String) -> String {
     let path = get_storage_path();
 
-    // Asegurar que el directorio existe
     if let Some(parent) = path.parent() {
         if !parent.exists() {
             if let Err(e) = std::fs::create_dir_all(parent) {
@@ -31,8 +28,8 @@ fn save_code(code: String) -> String {
         }
     }
 
-    println!("Guardando código en: {:?}", path); // <-- DEBUG
-    println!("Código a guardar: {}", code); // <-- DEBUG
+    println!("Guardando código en: {:?}", path); 
+    println!("Código a guardar: {}", code);
 
     match fs::write(&path, code) {
         Ok(_) => {
@@ -46,15 +43,14 @@ fn save_code(code: String) -> String {
     }
 }
 
-/// Cargar el código guardado del archivo local
 #[command]
 fn load_code() -> String {
     let path = get_storage_path();
-    println!("Cargando código desde: {:?}", path); // <-- DEBUG
+    println!("Cargando código desde: {:?}", path);
 
     match fs::read_to_string(&path) {
         Ok(code) => {
-            println!("📄 Código cargado: {}", code); // <-- DEBUG
+            println!("📄 Código cargado: {}", code);
             code
         }
         Err(e) => {
@@ -64,7 +60,6 @@ fn load_code() -> String {
     }
 }
 
-/// Ejecutar código JavaScript en Node.js
 #[command]
 fn run_js_code(code: String) -> String {
     let exe_path = env::current_exe().unwrap();
